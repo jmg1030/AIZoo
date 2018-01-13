@@ -1,22 +1,22 @@
-Neurons.Ipop = 100;
-Neurons.Epop = 100;
+Neurons.Ipop = 50;
+Neurons.Epop = 50;
 
 Neurons.A = 0;
 
 pop = Neurons.Ipop + Neurons.Epop;
 
-TimeParams.time = 1000;
+TimeParams.time = 100;
 TimeParams.dt   = 0.01;
 
 T = length(0:TimeParams.dt:TimeParams.time);
 
-Neurons.I = zeros(pop,T);
+Neurons.I = ones(pop,T);
 Neurons.I(1,1) = 1;
 
-K = 500;
+K = 10;
 
-WI = -1.*(rand(pop,Neurons.Ipop) <= K./pop);
-WE = rand(pop,Neurons.Epop) <= K./pop;
+% WI = -1.*(rand(pop,Neurons.Ipop) <= K./pop);
+% WE = rand(pop,Neurons.Epop) <= K./pop;
 
 % WI = -rand(pop,Neurons.Ipop).*(rand(pop,Neurons.Ipop) <= K./pop);
 % WE = rand(pop,Neurons.Epop).*(rand(pop,Neurons.Epop) <= K./pop);
@@ -30,14 +30,18 @@ WE = rand(pop,Neurons.Epop) <= K./pop;
 % WI = -1.*(rand(pop,Neurons.Ipop));
 % WE = 1.*(rand(pop,Neurons.Epop));
 
-Neurons.W = ones(pop,pop);
-Neurons.W(1:pop,1:Neurons.Epop)     = WE;
-Neurons.W(1:pop,Neurons.Epop+1:pop) = WI;
+% Neurons.W = ones(pop,pop);
+% Neurons.W(1:pop,1:Neurons.Epop)     = WE;
+% Neurons.W(1:pop,Neurons.Epop+1:pop) = WI;
+
+%Neurons.W = (rand(pop,pop) <= K./pop) - (rand(pop,pop) <= K./pop);
+
+Neurons.W = (rand(pop) - rand(pop));
 
 Neurons.tau = ones(pop,1);
-Neurons.tau(1:Neurons.Epop,1) = 10.*(Neurons.tau(1:Neurons.Epop,1));
+%Neurons.tau(1:Neurons.Epop,1) = 100.*(Neurons.tau(1:Neurons.Epop,1));
 
-Neurons.syn = 10.*ones(pop,1);
+Neurons.syn = 1000.*ones(pop,1);
 %Neurons.syn(Neurons.Epop+1:pop,1) = 0.5.*(Neurons.syn(Neurons.Epop+1:pop,1));
 
 [Values] = CortexNet(TimeParams,Neurons);

@@ -1,33 +1,33 @@
-function [Values] = CortexNet(TimeParams,Neurons);
+function [Values] = AutoEncoder(Data,Neurons);
 
-dt   = TimeParams.dt;
-time = TimeParams.time;
+x = Data.x;
+y = Data.y;
 
-t = 0:dt:time; 
-T = length(t);
+pop = Neurons.pop;
 
-Epop = Neurons.Epop;
-Ipop = Neurons.Ipop;
-
-pop = Epop + Ipop;
-
-tau = Neurons.tau;
-
-W = Neurons.W;
+WX = Neurons.WX;
+WY = Neurons.WY;
+WZ = Neurons.WZ;
 
 b = Neurons.b;
+a = Neurons.a;
 
-x = zeros(pop,T);
-f = zeros(pop,T);
+DX = size(WX);
+DY = size(WY);
+DZ = size(WZ);
 
 %%
 
-for n=1:T-1
+X = 1./(1 + exp(-(WX*x + b)));
+%Y = 1./(1 + exp(-(WY*X + b)));
+%Z = 1./(1 + exp(-(WZ*Y + b)));
 
-x(:,n+1) = x(:,n) + atan(W*x(:,n) + b(:,n)).*dt;
-f(:,n+1) = sum(x(:,n+1))./pop;
+WX = GradientDescent(a,WX,DX,X,y);
+%WY = GradientDescent(a,WY,DY,Y,Z);
+%WZ = GradientDescent(a,WZ,DZ,Z,y);
 
-end
+Data.WX = WX;
 
-Values.t = t;
-Values.x = x;
+Values.X = X;
+%Values.Y = Y;
+%Values.Z = Z;

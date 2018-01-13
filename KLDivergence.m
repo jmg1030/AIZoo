@@ -1,11 +1,11 @@
-function [KL] = KLDivergence(x,dx,Y1,Y2)
+function [KL] = KLDivergence(dS,D,P,Q)
 
-X  = length(x);
+KL = zeros(D(1),D(2));
 
-KL = zeros(1,X);
+for m=1:D(1)
+for n=1:D(2)
 
-for n=1:X-1
-    
-KL(n+1) = KL(n) - (log(Y1(n)/Y2(n)).*Y1(n).*dx);
+KL(m,n) = KL(m,n) - log(P(m,n)/Q(m,n)).*P(m,n).*dS;
 
+end
 end

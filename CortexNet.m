@@ -21,16 +21,23 @@ I = Neurons.I;
 
 x = zeros(pop,T);
 y = zeros(pop,T);
-r = zeros(pop,T);
+s = zeros(pop,T);
 f = zeros(pop,T);
 
 %%
 
 for n=1:T-1
 
-x(:,n+1) = x(:,n) + (- x(:,n) + W*r(:,n) + I(:,n)).*dt./tau;
-y(:,n+1) = y(:,n) + x(:,n).*dt.*A;
-r(:,n+1) = 1./(1 + exp(-x(:,n+1).*syn));
+dx = - x(:,n) + W*s(:,n) + I(:,n);
+x(:,n+1) = x(:,n) + dx.*dt./tau;
+%s(:,n+1) = atan(x(:,n+1).*syn); %1./(1 + exp(-x(:,n+1).*syn));
+
+if any(x(:,n+1) > 0)
+
+spikes = find(x(:,n+1) > 0);
+s(spikes,n+1) = 1;
+
+end
 
 f(:,n+1) = sum(x(:,n+1))./pop;
 
@@ -38,5 +45,5 @@ end
 
 Values.t = t;
 Values.x = x;
-Values.r = r;
+Values.s = s;
 Values.f = f;
