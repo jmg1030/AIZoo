@@ -30,14 +30,7 @@ for n=1:T-1
 
 dx = - x(:,n) + W*s(:,n) + I(:,n);
 x(:,n+1) = x(:,n) + dx.*dt./tau;
-%s(:,n+1) = atan(x(:,n+1).*syn); %1./(1 + exp(-x(:,n+1).*syn));
-
-if any(x(:,n+1) > 0)
-
-spikes = find(x(:,n+1) > 0);
-s(spikes,n+1) = 1;
-
-end
+s(:,n+1) = atan(x(:,n+1).*syn); %1./(1 + exp(-x(:,n+1).*syn));
 
 f(:,n+1) = sum(x(:,n+1))./pop;
 
